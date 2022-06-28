@@ -1,0 +1,93 @@
+@using Microsoft.AspNetCore.Identity
+@using SAGE.AspNetCore.Identity.Data
+@inject SignInManager<SAGEUser> SignInManager
+@inject UserManager<SAGEUser> UserManager
+@model SAGE.Models.ProfileVM
+
+@{
+    ViewData["Title"] = "View Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    <div>
+        <h1>@(Model.DisplayName)'s Profile</h1>
+
+        <h2>Favorite Recipes:</h2>
+        @if (Model.FavoriteRecipes.Count == 0)
+        {
+            <div>No Favorite Recipes.</div>
+        }
+        @foreach (var fRecipe in Model.FavoriteRecipes)
+        {
+            @Html.ActionLink(fRecipe.Name, "Details", "Recipes", new { id = fRecipe.Id})
+            <br />
+        }
+
+        <h2>Public Recipes: </h2>
+        @if (Model.PublicRecipes.Count == 0)
+        {
+            <div>No Public Recipes.</div>
+        }
+        @foreach (var pRecipe in Model.PublicRecipes)
+        {
+
+            @Html.ActionLink(pRecipe.Name, "Details", "Recipes", new { id = pRecipe.Id})
+            <br />
+
+        }
+
+        <h2>Followers:</h2>
+        @if (Model.Followers.Count == 0)
+        {
+            <div>No Followers.</div>
+        }
+        @foreach (var follower in Model.Followers)
+        {
+
+            @Html.ActionLink(follower.FirstName, "ViewProfile", "Home", new { user = follower.Id})
+            <br />
+
+        }
+
+
+        @if(Model.Email != UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id)
+        {
+          <a id="followButton" href="@Url.Action("FollowUser","Home", new { user = Model.Email.ToString()})">
+          <button>Follow User</button>
+          </a>
+
+          <a id="unfollowButton" href="@Url.Action("FollowUser","Home", new { user = Model.Email.ToString()})">
+          <button>UnFollow User</button>
+          </a>
+        }
+
+
+    </div>
+}
+else
+{
+    <h1>ERROR: Please login to view page</h1>
+}
+
+<script>
+
+       var subButton = document.getElementById("followButton");
+       var unsubButton = document.getElementById("unfollowButton");
+
+       function toggleButtons(){
+       if(@ViewData["Following?"]){
+           subButton.style.display = "none";
+           unsubButton.style.display = "block";
+       } else {
+           subButton.style.display = "block";
+           unsubButton.style.display = "none";
+       }
+    }
+
+    toggleButtons();
+
+
+</script>

@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "CustomerSupport";
+}
+
+<h1>Customer Support</h1>
+
+<a class="customerSupport"> </a>
+The SAGE team strives to ensure complete customer satisfaction. If you have any questions or concerns, please contact us at:
+<br><br>
+Phone: 1-800-543-5473 <br><br>
+Email: Contact.Sage@gmail.com<br><br>
+
+<div id = "ad">
+
+<a class="adtext">Want your ad here? Call 1-800-485-4393</a>
+
+</div>
+
+<script>
+   var advertisement = document.getElementById("ad");
+
+   if(@ViewData["Subscribed?"]){
+       advertisement.style.display = "none";
+   } else {
+       advertisement.style.display = "block";
+}
+
+</script>

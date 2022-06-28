@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SAGE.AspNetCore.Identity.Data
+@inject SignInManager<SAGEUser> SignInManager
+@inject UserManager<SAGEUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+    </li>
+    <li class="nav-item">
+        <a  class="nav-link text-dark" href="@Url.Action("ViewProfile", "Home", new { user = UserManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name).Id})" title="My Profile">My Profile</a>
+    </li>
+    <li class="nav-item">
+        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button  type="submit" class="nav-link btn btn-link text-dark" style="box-shadow: 0 0 0 0rem rgb(13 110 253 / 0%); margin-top: -1px;">Logout</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li>
+}
+</ul>

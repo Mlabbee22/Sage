@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SAGE.AspNetCore.Identity.Data
+@inject SignInManager<SAGEUser> SignInManager
+@inject UserManager<SAGEUser> UserManager
+@model IEnumerable<SAGE.Models.GroceryList>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Grocery List</h1>
+
+
+
+    <a style="text-decoration:none;" href="@Url.Action("Create", "GroceryLists")">
+        <button>Add Ingredient</button>
+    </a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ingredient)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+           <td>
+                @Html.DisplayFor(modelItem => item.Ingredient.Name)
+            </td>
+            <td>
+                <a style="text-decoration: none;" href="@Url.Action("Edit", "GroceryLists", new {id = item.UserId, ingredientId = item.IngredientId})">
+                    <button>Edit</button>
+                </a>
+                <a style="text-decoration: none;" href="@Url.Action("Delete", "GroceryLists", new {id = item.UserId, ingredientId = item.IngredientId})">
+                    <button>Delete</button>
+                </a>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

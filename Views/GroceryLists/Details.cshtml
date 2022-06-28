@@ -1,0 +1,106 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SAGE.AspNetCore.Identity.Data
+@model SAGE.Models.GroceryList
+@inject SignInManager<SAGEUser> SignInManager
+@inject UserManager<SAGEUser> UserManager
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ @if (SignInManager.IsSignedIn(User))
+{
+
+<h1>Grocery List</h1>
+
+
+    <button id="PrintGroceryList" onclick="window.print()">Print Grocery List</button>
+
+<div id="groceryIngredientList">
+
+</div>
+
+<button id="addIngredient" onclick="addIngredient()">Add ingredient</button>
+<button id="removeIngredient" onclick="removeIngredient()">Remove ingredient</button>
+
+<textarea class = "groceryNotes"></textarea>
+
+<script>
+    //for(0 -> ingCount){addIngredients(ingName);}
+
+
+    var ingID = 0; //when loading, this will be set to number of ingrediants in list, default 0
+    var list = document.getElementById("groceryIngredientList");
+
+    function addIngredient(){
+var newbox = document.createElement("input");
+var newlabel = document.createElement("Label");
+ingID++;
+newlabel.innerHTML = "Ingrediant " + ingID;     
+
+newbox.setAttribute("type", "text");
+newbox.setAttribute("value", "");
+newbox.setAttribute("name", "Box Name");
+newbox.setAttribute("style", "width:200px; clear: left; float: left;");
+newbox.id = "box" + ingID;
+
+newlabel.setAttribute("style", "font-weight:normal; clear: left; float: left;");
+newlabel.id = "label" + ingID;
+
+list.appendChild(newlabel);
+list.appendChild(newbox);
+        
+}
+
+    function removeIngredient(){
+        if(ingID > 0){
+        var targetbox = document.getElementById("box" + ingID);
+        var targetlabel = document.getElementById("label" + ingID);
+        targetbox.remove();
+        targetlabel.remove();
+        ingID--;
+        }
+    }
+
+</script>
+
+<div>
+    <h4>GroceryList</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ingredient)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ingredient.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.User.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+}
+else
+{
+    <h1>ERROR: Please login to view page</h1>
+}

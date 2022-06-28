@@ -1,0 +1,144 @@
+@using Microsoft.AspNetCore.Identity
+@using SAGE.AspNetCore.Identity.Data
+@model SAGE.Models.Recipe
+@inject SignInManager<SAGEUser> SignInManager
+@inject UserManager<SAGEUser> UserManager
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    function copyToClipboard() {
+        alert("URL Copied.");
+        window.navigator.clipboard.writeText(window.location.href);
+    }
+</script>
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+<h1>Details</h1>
+
+<div>
+    <button id="PrintRecipe" onclick="window.print()">Print Recipe</button>
+    <button id="CopyURL" onclick="copyToClipboard()">Share Recipe</button>
+
+    <a style="text-decoration:none;" href="@Url.Action("Create", "Reviews", new {  recipeID = Model.Id})">
+        <button>Add/Edit review</button>
+    </a>
+    <a style="text-decoration:none;" href="@Url.Action("Index", "Reviews", new {  id = Model.Id})">
+        <button>Reviews</button>
+    </a>
+
+    @if (Model.isPublic)
+        {
+            @if (ViewBag.RecipeSaved == "no")
+            {
+                <a style="text-decoration:none;" href="@Url.Action("SaveRecipe", new {  id = Model.Id})">
+                <button>Save Recipe!</button>
+            </a>
+            }
+            @if (ViewBag.isFave == "no" && ViewBag.RecipeSaved == "yes")
+            {
+                <a style="text-decoration:none;" href="@Url.Action("unSaveRecipe", new {  id = Model.Id})">
+                    <button>Unsave this recipe :(</button>
+                </a>
+                <a style="text-decoration:none;" href="@Url.Action("FavoriteRecipe", new {  id = Model.Id})">
+                    <button>Set as a Favorite</button>
+                </a>
+            }
+            @if (ViewBag.RecipeSaved == "yes" && ViewBag.isFave == "yes")
+            {
+                <a style="text-decoration:none;" href="@Url.Action("unSaveRecipe", new {  id = Model.Id})">
+                    <button>Unsave this recipe :(</button>
+                </a>
+                <a style="text-decoration:none;" href="@Url.Action("FavoriteRecipe", new {  id = Model.Id})">
+                    <button>Remove as Favorite</button>
+                </a>
+            }
+        }
+        
+
+        <h4>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+        </h4>
+        <hr />
+        <dl class="row">
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Tags)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Tags)
+            </dd>
+            
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Rating)
+            </dt>
+            @if (Model.Rating == -1)
+            {
+                <dd class="col-sm-10">
+                    No reviews
+                </dd>
+            }
+            @if (Model.Rating != -1)
+            {
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Rating)/10
+                </dd>
+            }
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Author)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.ActionLink(Model.AuthorNavigation.FirstName, "ViewProfile", "Home", new { user = Model.AuthorNavigation.Id})
+            </dd>
+        </dl>
+    </div>
+
+        <div class="recipeContainer">
+
+        <div class="stepContainer">
+            <div class="recipeStepHeader">Ingredients:</div> <br>
+            <div class="recipeStepBody">
+                @Html.DisplayFor(model => model.Ingredients) <br>
+            </div> <br>
+
+        </div>
+    </div>
+
+    <div class="recipeContainer">
+
+        <div class="stepContainer">
+            <div class="recipeStepHeader">Steps:</div> <br>
+            <div class="recipeStepBody">
+                @Html.DisplayFor(model => model.Steps) <br>
+            </div> <br>
+
+        </div>
+    </div>
+
+    <div>
+        <a style="text-decoration: none;" href="@Url.Action("Edit")/@Model.Id">
+            <button>Edit</button>
+        </a>
+        <a style="text-decoration: none;" href="@Url.Action("Index")">
+            <button>Back to List</button>
+        </a>
+    </div>
+}
+else
+{
+    <h1>ERROR: Please login to view page</h1>
+}

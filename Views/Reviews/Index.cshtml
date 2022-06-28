@@ -1,0 +1,70 @@
+﻿@model IEnumerable<SAGE.Models.Review>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Reviews</h1>
+@if (ViewBag.id != null)
+{
+    <div>
+        <a style="text-decoration: none;" href="@Url.Action("Details", "Recipes", new {id = ViewBag.id})">
+            <button type="button">Back to recipe</button>
+        </a>
+    </div>
+}
+
+<p>
+    @*<a asp-action="Create">Create New</a>*@
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th>
+                Review
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Recipe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Review1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recipe.Name)
+            </td>
+            <td>
+                @Html.ActionLink(item.User.FirstName, "ViewProfile", "Home", new { user = item.UserId})
+            </td>
+            <td>
+            @if(User.Identity.Name == item.User.UserName)
+            {
+                <a style="text-decoration: none;" href="@Url.Action("Edit", "Reviews", new {id = item.UserId, RecipeID = item.RecipeId})">
+                    <button>Edit</button>
+                </a>
+            }
+            @if (User.Identity.Name == item.User.UserName)
+            {
+                <a style="text-decoration: none;" href="@Url.Action("Delete", "Reviews", new {id = item.UserId, RecipeID = item.RecipeId})">
+                    <button>Delete</button>
+                </a>
+            }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

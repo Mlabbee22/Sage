@@ -1,0 +1,56 @@
+@using Microsoft.AspNetCore.Identity
+@using SAGE.AspNetCore.Identity.Data
+@inject SignInManager<SAGEUser> SignInManager
+@inject UserManager<SAGEUser> UserManager
+
+
+@{
+    ViewData["Title"] = "Subscribe";
+}
+
+    @if (SignInManager.IsSignedIn(User))
+{
+<h1>Subscribe</h1>
+
+<div class="subscribeContainer">
+    <div class = "subscribeHeader">Subscribe today and get:</div>
+
+    <ul class = "subscribeBody">
+        <li>A grocery list to store ingredients for shopping</li>
+        <li>Edit public recipes to make them your own</li>
+        <li>No more ads!</li>
+    </ul>
+
+    <a id="subscribeButton" style="text-decoration:none;" href="@Url.Action("SetPremiumUser")">
+        <button onclick="toggleButtons()">Subscribe</button>
+    </a>
+    <a id="unsubscribeButton" href="@Url.Action("SetNonPremiumUser")">
+        <button onclick="toggleButtons()">Unsubscribe</button>
+    </a>
+
+</div>
+}
+else
+{
+    <h1>ERROR: Please login to view page</h1>
+}
+
+<script>
+
+   var subButton = document.getElementById("subscribeButton");
+   var unsubButton = document.getElementById("unsubscribeButton");
+
+   function toggleButtons(){
+   if(@ViewData["Subscribed?"]){
+       subButton.style.display = "none";
+       unsubButton.style.display = "block";
+   } else {
+       subButton.style.display = "block";
+       unsubButton.style.display = "none";
+   }
+}
+
+toggleButtons();
+
+
+</script>

@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Hey Good Lookin'.</h1>
+    <p>Let's get cooking!</p>
+</div>
+
+<div id = "ad">
+
+<a class="adtext">Want your ad here? Call 1-800-485-4393</a>
+
+</div>
+
+<script>
+   var advertisement = document.getElementById("ad");
+
+   if(@ViewData["Subscribed?"]){
+       advertisement.style.display = "none";
+   } else {
+       advertisement.style.display = "block";
+}
+
+</script>

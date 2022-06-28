@@ -1,0 +1,52 @@
+﻿@model SAGE.Models.Review
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Review</h4>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group invisible" style="height:1px">
+                <label asp-for="RecipeId" class="control-label"></label>
+                <input asp-for="RecipeId" class ="form-control" /> </input>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label">Rating(1-10):</label>
+                <input asp-for="Rating" class="form-control" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Review1" class="control-label">Description:</label>
+                <input asp-for="Review1" class="form-control" />
+                <span asp-validation-for="Review1" class="text-danger"></span>
+            </div>
+            <div class="form-group invisible" style="height:25px">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class ="form-control" /></input>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+            <div style="height:5px"></div>
+        </form>
+    </div>
+
+</div>
+
+<div style="height:5px"></div>
+<div>
+    <a style="text-decoration: none;" href="@Url.Action("Details", "Recipes", new { id = Model.RecipeId})">
+        <button type="button" class="btn btn-primary">Back to recipe</button>
+    </a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
